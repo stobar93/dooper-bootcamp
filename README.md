@@ -20,6 +20,9 @@ We will be creating a basic e-commerce website with two user in mind - vendor an
 
 - [Node.js](https://nodejs.org/en/download/)
 - [Visual Studio Code](https://code.visualstudio.com/download)
+  - Install eslint extension
+  - Install prettier extension
+  - Install Live share
 - [Slack](https://slack.com/)
 - [Linear](https://linear.app)
 
