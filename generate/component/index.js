@@ -32,7 +32,7 @@ module.exports = {
     const split = answers.directory.split("/");
 
     let directory = answers.directory;
-    console.log({ directory, split });
+
     if (directory !== "" && split[split.length - 1] !== "components") {
       split.push("components");
       directory = split.join("/");
