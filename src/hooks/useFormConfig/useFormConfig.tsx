@@ -2,12 +2,15 @@
 import { useFormik } from "formik";
 import { object, string } from "yup";
 
+export type FieldTypes = "text" | "password" | "email" | "phone_number";
+
 export interface FieldProps {
-  id: "firstName" | "lastName" | "email" | "password" | "phone_number";
+  id: string;
   initialValue: string;
   placeholder: string;
   label: string;
-  validate: "firstName" | "lastName" | "email" | "password" | "phone_number";
+  validate: FieldTypes;
+  required?: boolean;
 }
 
 const objectFromArray = (fields: FieldProps[], key: keyof FieldProps) => {
@@ -15,16 +18,16 @@ const objectFromArray = (fields: FieldProps[], key: keyof FieldProps) => {
     if (key !== "validate") {
       return [field.id, field[key]];
     }
-    return [field.id, validationDictionary[field.validate]];
+    let validation = validationDictionary[field.validate];
+    return [field.id, field.required ? validation.required() : validation];
   });
 
   return Object.fromEntries(mappedProps);
 };
 
 const validationDictionary = {
-  firstName: string().required("Required first name"),
-  lastName: string().required("Required last name"),
-  email: string().email("Please provide a valid email").required(),
+  text: string(),
+  email: string().email("Please provide a valid email"),
   password: string()
     .matches(new RegExp(/(?=.*[a-z])/), "Must contain lowercase a-z characters")
     .matches(new RegExp(/(?=.*[A-Z])/), "Must contain uppercase A-Z characters")
@@ -35,13 +38,11 @@ const validationDictionary = {
     )
     .min(8, "Must be at least 8 characters long")
     .trim("Spaces are not allowed")
-    .strict()
-    .required("Required password"),
+    .strict(),
   phone_number: string()
     .matches(new RegExp(/^[0-9]+$/), "Must contain only numbers")
     .min(10, "Must be 10 characters long")
     .max(10, "Must be 10 characters long")
-    .required()
 };
 
 function useFormConfig(fields: FieldProps[]) {

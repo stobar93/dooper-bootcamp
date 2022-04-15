@@ -11,28 +11,32 @@ const fields: FieldProps[] = [
     initialValue: "",
     placeholder: "",
     label: "First name",
-    validate: "firstName"
+    validate: "text",
+    required: true
   },
   {
     id: "lastName",
     initialValue: "",
     placeholder: "",
     label: "Last name",
-    validate: "lastName"
+    validate: "text",
+    required: true
   },
   {
     id: "email",
     initialValue: "",
     placeholder: "",
     label: "Email",
-    validate: "email"
+    validate: "email",
+    required: true
   },
   {
     id: "phone_number",
     initialValue: "",
     placeholder: "",
     label: "Phone number",
-    validate: "phone_number"
+    validate: "phone_number",
+    required: true
   }
 ];
 
