@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky install",
-    "generate": "yarn plop"
+    "generate": "yarn plop",
+    "types": "npx swagger-typescript-api -p $(grep NEXT_PUBLIC_SUPABASE_URL .env.local | cut -d '=' -f2)/rest/v1/?apikey=$(grep NEXT_PUBLIC_SUPABASE_ANON_KEY .env.local | cut -d '=' -f2) -o ./src/types -n SchemaDB.ts --no-client"
   },
   "dependencies": {
     "@emotion/cache": "latest",

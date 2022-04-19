@@ -24,12 +24,12 @@ function TextInput({ field, formik }: TextInputProps) {
       id={field.id}
       label={field.label}
       type={field.id === "password" ? "password" : "text"}
-      defaultValue={values[field.id]}
       onChange={handleChange}
       onBlur={handleBlur}
       helperText={(touched[field.id] && errors[field.id]) ?? null}
       placeholder={field.placeholder}
       margin="normal"
+      value={values[field.id]}
     />
   );
 }

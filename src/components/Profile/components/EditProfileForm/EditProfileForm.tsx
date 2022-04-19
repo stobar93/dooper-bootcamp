@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import TextInput from "src/components/TextInput";
 import { Box } from "@mui/material";
+import FormFeedbackDialog from "@src/components/FormFeedbackDialog";
 import useFormConfig from "@src/hooks/useFormConfig";
 import { FieldProps } from "@src/hooks/useFormConfig/useFormConfig";
+import { Profile } from "@src/types/SchemaDB";
+import { supabase } from "@src/utils/supabaseClient";
 import { StyledButton, Styledform } from "./styles";
 
 const fields: FieldProps[] = [
   {
-    id: "firstName",
+    id: "first_name",
     initialValue: "",
     placeholder: "",
     label: "First name",
@@ -15,7 +18,7 @@ const fields: FieldProps[] = [
     required: true
   },
   {
-    id: "lastName",
+    id: "last_name",
     initialValue: "",
     placeholder: "",
     label: "Last name",
@@ -69,10 +72,71 @@ const fields: FieldProps[] = [
 ];
 
 function EditProfileForm() {
-  const formik = useFormConfig(fields);
+  const [profile, setProfile] = useState<Profile | null>();
+  const getProfile = async () => {
+    let { data, error } = await supabase
+      .from("profile")
+      .select(
+        "email, first_name,last_name,phone_number, city, state, country, photo_url"
+      )
+      .maybeSingle();
+
+    if (error) {
+      return null;
+    }
+
+    return data;
+  };
+
+  useEffect(() => {
+    const fetch = async () => {
+      const profileInfo = await getProfile();
+      setProfile(profileInfo);
+    };
+
+    fetch();
+  }, []);
+
+  const mappedFields = useMemo(() => {
+    return fields.map((field) => {
+      if (!profile) {
+        return field;
+      }
+      const userInitialValue = profile
+        ? profile[field.id as keyof Profile]
+        : "";
+
+      return {
+        ...field,
+        initialValue:
+          typeof userInitialValue === "string" ? userInitialValue : ""
+      };
+    });
+  }, [profile]);
+
+  const handleSubmit = async (values: any) => {
+    const user = supabase.auth.user();
+    const id = user ? user.id : "";
+
+    const { data, error } = await supabase
+      .from("profile")
+      .update(values)
+      .eq("user_id", id)
+      .maybeSingle();
+
+    if (error) {
+      return { status: "error" };
+    }
+    if (data) {
+      setProfile(data);
+      return { status: "success" };
+    }
+  };
+
+  const formConfig = useFormConfig(mappedFields, handleSubmit);
 
   return (
-    <Styledform onSubmit={formik.handleSubmit}>
+    <Styledform onSubmit={formConfig.handleSubmit}>
       <Box
         display="flex"
         flexDirection="row"
@@ -80,7 +144,7 @@ function EditProfileForm() {
         justifyContent="center"
       >
         {fields.map((field) => (
-          <TextInput key={field.id} field={field} formik={formik} />
+          <TextInput key={field.id} field={field} formik={formConfig} />
         ))}
       </Box>
       <Box
@@ -89,7 +153,7 @@ function EditProfileForm() {
         flexWrap="wrap"
         justifyContent="center"
       >
-        {!formik.dirty || !formik.isValid ? (
+        {!formConfig.dirty || !formConfig.isValid ? (
           <StyledButton variant="outlined" disabled>
             Submit
           </StyledButton>
@@ -99,6 +163,10 @@ function EditProfileForm() {
           </StyledButton>
         )}
       </Box>
+      <FormFeedbackDialog
+        formStatus={formConfig.formStatus}
+        setFormStatus={formConfig.setStatus}
+      />
     </Styledform>
   );
 }
