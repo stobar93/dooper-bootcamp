@@ -23,6 +23,7 @@ function TextInput({ field, formik }: TextInputProps) {
       error={touched[field.id] && !!errors[field.id]}
       id={field.id}
       label={field.label}
+      type={field.id === "password" ? "password" : "text"}
       defaultValue={values[field.id]}
       onChange={handleChange}
       onBlur={handleBlur}
