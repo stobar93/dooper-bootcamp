@@ -1,7 +1,7 @@
 import { FormikErrors, FormikTouched, FormikValues } from "formik";
 import React, { ChangeEventHandler } from "react";
-import TextField from "@mui/material/TextField";
 import { FieldProps } from "@src/hooks/useFormConfig/useFormConfig";
+import { StyledTextField } from "./styles";
 
 type FormikProps = {
   values: FormikValues;
@@ -19,7 +19,7 @@ type TextInputProps = {
 function TextInput({ field, formik }: TextInputProps) {
   const { values, errors, touched, handleChange, handleBlur } = formik;
   return (
-    <TextField
+    <StyledTextField
       error={touched[field.id] && !!errors[field.id]}
       id={field.id}
       label={field.label}
@@ -28,6 +28,7 @@ function TextInput({ field, formik }: TextInputProps) {
       onChange={handleChange}
       onBlur={handleBlur}
       helperText={(touched[field.id] && errors[field.id]) ?? null}
+      placeholder={field.placeholder}
       margin="normal"
     />
   );

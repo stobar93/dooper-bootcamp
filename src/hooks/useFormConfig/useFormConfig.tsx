@@ -2,7 +2,7 @@
 import { useFormik } from "formik";
 import { object, string } from "yup";
 
-export type FieldTypes = "text" | "password" | "email" | "phone_number";
+export type FieldTypes = "text" | "password" | "email" | "phone_number" | "url";
 
 export interface FieldProps {
   id: string;
@@ -42,7 +42,8 @@ const validationDictionary = {
   phone_number: string()
     .matches(new RegExp(/^[0-9]+$/), "Must contain only numbers")
     .min(10, "Must be 10 characters long")
-    .max(10, "Must be 10 characters long")
+    .max(10, "Must be 10 characters long"),
+  url: string().url()
 };
 
 function useFormConfig(fields: FieldProps[]) {

@@ -1,9 +1,8 @@
 import React from "react";
-import Button from "@mui/material/Button";
 import useFormConfig from "@src/hooks/useFormConfig";
 import { FieldProps } from "@src/hooks/useFormConfig/useFormConfig";
 import TextInput from "../TextInput";
-import { Styledform } from "./styles";
+import { StyledButton, Styledform } from "./styles";
 
 const fields: FieldProps[] = [
   {
@@ -49,13 +48,13 @@ function Register() {
         <TextInput key={field.id} field={field} formik={formik} />
       ))}
       {!formik.dirty || !formik.isValid ? (
-        <Button variant="outlined" disabled>
+        <StyledButton variant="outlined" disabled>
           Submit
-        </Button>
+        </StyledButton>
       ) : (
-        <Button type="submit" variant="contained">
+        <StyledButton type="submit" variant="contained">
           Submit
-        </Button>
+        </StyledButton>
       )}
     </Styledform>
   );
