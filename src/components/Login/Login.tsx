@@ -1,6 +1,8 @@
 import React from "react";
+import FormFeedbackDialog from "@src/components/FormFeedbackDialog";
 import useFormConfig from "@src/hooks/useFormConfig";
 import { FieldProps } from "@src/hooks/useFormConfig/useFormConfig";
+import { supabase } from "@src/utils/supabaseClient";
 import TextInput from "../TextInput";
 import { StyledButton, Styledform } from "./styles";
 
@@ -24,22 +26,47 @@ const fields: FieldProps[] = [
 ];
 
 function Login() {
-  const formik = useFormConfig(fields);
+  const handleSubmit = async (values: { email: string; password: string }) => {
+    const { email, password } = values;
+
+    const { session, error } = await supabase.auth.signIn({
+      email,
+      password
+    });
+
+    if (!!session) {
+      return {
+        status: "success",
+        message: "Welcome! Now you can see your profile",
+        actionText: "Go to profile"
+      };
+    }
+    if (error) {
+      return { status: "error", message: error.message };
+    }
+  };
+
+  const formConfig = useFormConfig(fields, handleSubmit);
 
   return (
-    <Styledform onSubmit={formik.handleSubmit}>
+    <Styledform onSubmit={formConfig.handleSubmit}>
       {fields.map((field) => (
-        <TextInput key={field.id} field={field} formik={formik} />
+        <TextInput key={field.id} field={field} formik={formConfig} />
       ))}
-      {!formik.dirty || !formik.isValid ? (
-        <StyledButton variant="outlined" disabled>
-          Submit
-        </StyledButton>
-      ) : (
-        <StyledButton type="submit" variant="contained">
-          Submit
-        </StyledButton>
-      )}
+      <StyledButton
+        type="submit"
+        variant="contained"
+        disabled={
+          !formConfig.dirty || !formConfig.isValid || formConfig.isSubmitting
+        }
+      >
+        Submit
+      </StyledButton>
+      <FormFeedbackDialog
+        formStatus={formConfig.formStatus}
+        setFormStatus={formConfig.setStatus}
+        redirectTo="/profile"
+      />
     </Styledform>
   );
 }
