@@ -1,6 +1,6 @@
 import React from "react";
-import Header from "../Header";
-import MainContainer from "../MainContainer";
+import Header from "./components/Header";
+import MainContainer from "./components/MainContainer";
 import * as Styles from "./styles";
 
 type LayoutProps = {
