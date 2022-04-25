@@ -1,5 +1,5 @@
+import { supabaseClient } from "@supabase/supabase-auth-helpers/nextjs";
 import React from "react";
-import { supabase } from "src/utils/supabaseClient";
 import FormFeedbackDialog from "@src/components/FormFeedbackDialog";
 import useFormConfig from "@src/hooks/useFormConfig";
 import { FieldProps } from "@src/hooks/useFormConfig/useFormConfig";
@@ -41,12 +41,21 @@ const fields: FieldProps[] = [
   }
 ];
 
+const isNewUser = async (userEmail: string) => {
+  const { data } = await supabaseClient
+    .from("profile")
+    .select("id")
+    .eq("email", userEmail);
+  return data?.length === 0;
+};
+
 function Register() {
   const handleSubmit = async (values: any) => {
     const { email, password, firstName, lastName } = values;
-    const isNewUser = await supabase.isNewUSer(email);
-    if (isNewUser) {
-      const { user, error } = await supabase.auth.signUp(
+    const isNewSignUp = await isNewUser(email);
+
+    if (isNewSignUp) {
+      const { user, error } = await supabaseClient.auth.signUp(
         {
           email,
           password

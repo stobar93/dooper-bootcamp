@@ -1,3 +1,4 @@
+import { supabaseClient } from "@supabase/supabase-auth-helpers/nextjs";
 import React, { useEffect, useMemo, useState } from "react";
 import TextInput from "src/components/TextInput";
 import { Box } from "@mui/material";
@@ -5,7 +6,6 @@ import FormFeedbackDialog from "@src/components/FormFeedbackDialog";
 import useFormConfig from "@src/hooks/useFormConfig";
 import { FieldProps } from "@src/hooks/useFormConfig/useFormConfig";
 import { Profile } from "@src/types/SchemaDB";
-import { supabase } from "@src/utils/supabaseClient";
 import { StyledButton, Styledform } from "./styles";
 
 const fields: FieldProps[] = [
@@ -74,7 +74,7 @@ const fields: FieldProps[] = [
 function EditProfileForm() {
   const [profile, setProfile] = useState<Profile | null>();
   const getProfile = async () => {
-    let { data, error } = await supabase
+    let { data, error } = await supabaseClient
       .from("profile")
       .select(
         "email, first_name,last_name,phone_number, city, state, country, photo_url"
@@ -115,10 +115,10 @@ function EditProfileForm() {
   }, [profile]);
 
   const handleSubmit = async (values: any) => {
-    const user = supabase.auth.user();
+    const user = supabaseClient.auth.user();
     const id = user ? user.id : "";
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from("profile")
       .update(values)
       .eq("user_id", id)

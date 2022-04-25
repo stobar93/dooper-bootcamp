@@ -1,8 +1,8 @@
+import { supabaseClient } from "@supabase/supabase-auth-helpers/nextjs";
 import React from "react";
 import FormFeedbackDialog from "@src/components/FormFeedbackDialog";
 import useFormConfig from "@src/hooks/useFormConfig";
 import { FieldProps } from "@src/hooks/useFormConfig/useFormConfig";
-import { supabase } from "@src/utils/supabaseClient";
 import TextInput from "../TextInput";
 import { StyledButton, Styledform } from "./styles";
 
@@ -29,7 +29,7 @@ function Login() {
   const handleSubmit = async (values: { email: string; password: string }) => {
     const { email, password } = values;
 
-    const { session, error } = await supabase.auth.signIn({
+    const { session, error } = await supabaseClient.auth.signIn({
       email,
       password
     });

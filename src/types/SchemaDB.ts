@@ -9,6 +9,30 @@
  * ---------------------------------------------------------------
  */
 
+export interface Product {
+  /**
+   * Note:
+   * This is a Primary Key.<pk/>
+   * @format bigint
+   */
+  id: number;
+
+  /** @format text */
+  title: string;
+
+  /** @format bigint */
+  price: number;
+
+  /** @format text */
+  image?: string;
+
+  /** @format text */
+  description: string;
+
+  /** @format boolean */
+  published: boolean;
+}
+
 export interface Profile {
   /** @format timestamp with time zone */
   created_at?: string;
