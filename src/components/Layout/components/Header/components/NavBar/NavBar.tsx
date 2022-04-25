@@ -1,6 +1,6 @@
+import { useUser } from "@supabase/supabase-auth-helpers/react";
 import Link from "next/link";
 import React, { useMemo } from "react";
-import { supabase } from "@src/utils/supabaseClient";
 import * as Styles from "./styles";
 
 type pageProps = {
@@ -10,31 +10,32 @@ type pageProps = {
 };
 
 function NavBar() {
-  const authUser = supabase.auth.user()?.role === "authenticated";
+  const { user } = useUser();
+
   const pages: pageProps[] = useMemo(() => {
     return [
       {
         href: "/register",
         title: "Register",
-        visible: !authUser
+        visible: !user
       },
       {
         href: "/login",
         title: "Login",
-        visible: !authUser
+        visible: !user
       },
       {
         href: "/?logout=true",
         title: "Logout",
-        visible: authUser
+        visible: !!user
       },
       {
         href: "/profile",
         title: "Profile",
-        visible: authUser
+        visible: !!user
       }
     ];
-  }, [authUser]);
+  }, [user]);
 
   return (
     <Styles.StyledBox>
