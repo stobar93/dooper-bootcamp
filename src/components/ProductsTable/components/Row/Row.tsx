@@ -67,7 +67,7 @@ function Row({ product }: RowProps) {
         <TableCell align="center">
           <Avatar
             alt={`product ${productInfo.id} image`}
-            src={productInfo.image}
+            src={`${productInfo.image}?test=${Math.random()}`}
           />
         </TableCell>
 

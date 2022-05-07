@@ -67,50 +67,46 @@ function ProductForm({ initialProduct }: ProductFormProps) {
   const handleSubmit = (values: any) => {
     productMutate.mutate(values, {
       onSuccess: (data) => {
-        queryClient.invalidateQueries([
-          "fetch-products",
-          "authenticated",
-          true,
-          null,
+        return imageMutation.mutate(
+          { image: data.image, productId: data.id },
           {
-            column: "created_at",
-            options: {
-              ascending: false
+            onSuccess: () => {
+              queryClient.invalidateQueries([
+                "fetch-products",
+                "authenticated",
+                true,
+                null,
+                {
+                  column: "created_at",
+                  options: {
+                    ascending: false
+                  }
+                }
+              ]);
+              setFormStatus({
+                status: "success",
+                message: "Operacion exitosa"
+              });
+              !initialProduct && resetForm();
+            },
+            onError: () => {
+              setFormStatus({
+                status: "error"
+              });
             }
           }
-        ]);
-        return imageMutation.mutate({ image: data.image, productId: data.id });
+        );
       }
     });
   };
 
   const formConfig = useFormConfig(fields, handleSubmit, initialProduct);
   const { setFormStatus, resetForm } = formConfig;
-  useEffect(() => {
-    if (productMutate.isError) {
-      setFormStatus({
-        status: "error"
-      });
-    }
-
-    if (productMutate.isSuccess) {
-      setFormStatus({
-        status: "success",
-        message: "Operacion exitosa"
-      });
-      resetForm();
-    }
-  }, [
-    productMutate.isError,
-    productMutate.isSuccess,
-    resetForm,
-    setFormStatus
-  ]);
 
   useEffect(() => {
     formConfig.values.image instanceof File
       ? setImgUrl(URL.createObjectURL(formConfig.values.image))
-      : setImgUrl(formConfig.values.image);
+      : setImgUrl(`${formConfig.values.image}?hash=${Math.random()}`);
   }, [formConfig.values.image]);
 
   return (

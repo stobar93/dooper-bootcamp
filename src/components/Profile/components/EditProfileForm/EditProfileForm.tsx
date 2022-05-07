@@ -73,11 +73,12 @@ const fields: FieldProps[] = [
 
 function EditProfileForm() {
   const [profile, setProfile] = useState<Profile | null>();
+
   const getProfile = async () => {
     let { data, error } = await supabaseClient
       .from("profile")
       .select(
-        "email, first_name,last_name,phone_number, city, state, country, photo_url"
+        "id, email, first_name,last_name,phone_number, city, state, country, photo_url"
       )
       .maybeSingle();
 
@@ -115,13 +116,10 @@ function EditProfileForm() {
   }, [profile]);
 
   const handleSubmit = async (values: any) => {
-    const user = supabaseClient.auth.user();
-    const id = user ? user.id : "";
-
     const { data, error } = await supabaseClient
       .from("profile")
       .update(values)
-      .eq("user_id", id)
+      .eq("id", profile?.id)
       .maybeSingle();
 
     if (error) {
