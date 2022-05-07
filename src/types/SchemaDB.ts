@@ -9,6 +9,24 @@
  * ---------------------------------------------------------------
  */
 
+export interface Categories {
+  /**
+   * Note:
+   * This is a Primary Key.<pk/>
+   * @format bigint
+   */
+  id: number;
+
+  /** @format timestamp with time zone */
+  created_at?: string;
+
+  /** @format text */
+  title: string;
+
+  /** @format text */
+  description?: string;
+}
+
 export interface Product {
   /**
    * Note:
@@ -31,6 +49,12 @@ export interface Product {
 
   /** @format boolean */
   published: boolean;
+
+  /** @format uuid */
+  created_by?: string;
+
+  /** @format timestamp with time zone */
+  created_at?: string;
 }
 
 export interface Profile {
