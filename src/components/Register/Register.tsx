@@ -3,7 +3,7 @@ import React from "react";
 import FormFeedbackDialog from "@src/components/FormFeedbackDialog";
 import useFormConfig from "@src/hooks/useFormConfig";
 import { FieldProps } from "@src/hooks/useFormConfig/useFormConfig";
-import TextInput from "../TextInput";
+import TextInput from "../InputComponent/components/TextInput";
 import { StyledButton, Styledform } from "./styles";
 
 const fields: FieldProps[] = [

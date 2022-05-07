@@ -111,6 +111,20 @@ const theme = createTheme({
           borderRadius: 8
         }
       }
+    },
+    MuiTableHead: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#a2adb5"
+        }
+      }
+    },
+    MuiTableRow: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#fff"
+        }
+      }
     }
   },
   palette: {

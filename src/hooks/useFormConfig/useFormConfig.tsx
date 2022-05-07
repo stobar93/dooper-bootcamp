@@ -1,20 +1,23 @@
-// import { useMemo } from "react";
 import { ApiError } from "@supabase/supabase-js";
 import { useFormik } from "formik";
 import { useState } from "react";
-import { object, string } from "yup";
+import { mixed, number, object, string } from "yup";
 
 export type FieldTypes =
   | "text"
+  | "text_long"
   | "password"
   | "email"
   | "phone_number"
   | "url"
-  | "country_code";
+  | "country_code"
+  | "number"
+  | "file"
+  | "boolean";
 
 export interface FieldProps {
   id: string;
-  initialValue: string;
+  initialValue: any;
   placeholder: string;
   label: string;
   validate: FieldTypes;
@@ -42,6 +45,7 @@ const objectFromArray = (fields: FieldProps[], key: keyof FieldProps) => {
 
 const validationDictionary = {
   text: string(),
+  text_long: string(),
   email: string().email("Please provide a valid email"),
   password: string()
     .matches(new RegExp(/(?=.*[a-z])/), "Must contain lowercase a-z characters")
@@ -58,14 +62,19 @@ const validationDictionary = {
     .matches(new RegExp(/(^[0-9]+$)/), "Must contain only numbers")
     .min(10, "Must be at least 10 characters long"),
   url: string().url(),
-  country_code: string().matches(new RegExp(/(^\+{1})([0-9]{1,3}$)/))
+  country_code: string().matches(new RegExp(/(^\+{1})([0-9]{1,3}$)/)),
+  number: number().positive(),
+  file: mixed(),
+  boolean: mixed()
 };
 
 function useFormConfig(
   fields: FieldProps[],
-  customHandleSubmit: (values: any) => any
+  customHandleSubmit: (values: any) => any,
+  serverInitialValues?: any
 ) {
-  const initialValues = objectFromArray(fields, "initialValue");
+  const initialValues =
+    serverInitialValues ?? objectFromArray(fields, "initialValue");
   const validationSchema = object(objectFromArray(fields, "validate"));
   const [formStatus, setFormStatus] = useState<FormStatus>({
     status: "not_started",
@@ -76,7 +85,7 @@ function useFormConfig(
     onSubmit: async (values, { resetForm }) => {
       setFormStatus({ status: "loading" });
       const submitResponse = await customHandleSubmit(values);
-      setFormStatus(submitResponse);
+      submitResponse && setFormStatus(submitResponse);
       submitResponse.status === "success" && resetForm();
     },
     validationSchema,

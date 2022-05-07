@@ -1,8 +1,8 @@
 import { supabaseClient } from "@supabase/supabase-auth-helpers/nextjs";
 import React, { useEffect, useMemo, useState } from "react";
-import TextInput from "src/components/TextInput";
 import { Box } from "@mui/material";
 import FormFeedbackDialog from "@src/components/FormFeedbackDialog";
+import TextInput from "@src/components/InputComponent/components/TextInput";
 import useFormConfig from "@src/hooks/useFormConfig";
 import { FieldProps } from "@src/hooks/useFormConfig/useFormConfig";
 import { Profile } from "@src/types/SchemaDB";

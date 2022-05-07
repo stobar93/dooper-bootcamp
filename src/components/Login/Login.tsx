@@ -3,7 +3,7 @@ import React from "react";
 import FormFeedbackDialog from "@src/components/FormFeedbackDialog";
 import useFormConfig from "@src/hooks/useFormConfig";
 import { FieldProps } from "@src/hooks/useFormConfig/useFormConfig";
-import TextInput from "../TextInput";
+import TextInput from "../InputComponent/components/TextInput";
 import { StyledButton, Styledform } from "./styles";
 
 const fields: FieldProps[] = [
@@ -37,8 +37,7 @@ function Login() {
     if (!!session) {
       return {
         status: "success",
-        message: "Welcome! Now you can see your profile",
-        actionText: "Go to profile"
+        message: "Bienvenido!"
       };
     }
     if (error) {
@@ -65,7 +64,7 @@ function Login() {
       <FormFeedbackDialog
         formStatus={formConfig.formStatus}
         setFormStatus={formConfig.setStatus}
-        redirectTo="/profile"
+        redirectTo="/admin/productos"
       />
     </Styledform>
   );

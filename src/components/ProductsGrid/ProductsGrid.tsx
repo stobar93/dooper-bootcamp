@@ -1,10 +1,10 @@
 import React from "react";
 import ProductCard from "src/components/ProductsGrid/components/ProductCard";
 import { Box, Dialog, DialogTitle } from "@mui/material";
-import useProducts from "@src/hooks/useProducts";
+import useGetProducts from "@src/hooks/useGetProducts";
 
 function ProductsGrid() {
-  const { products, isLoading } = useProducts();
+  const { products, isLoading } = useGetProducts({ published: true });
 
   return (
     <Box display="flex" flexWrap="wrap" justifyContent="center">

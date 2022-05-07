@@ -1,35 +1,41 @@
-import { FormikErrors, FormikTouched, FormikValues } from "formik";
-import React, { ChangeEventHandler } from "react";
+import React from "react";
+import { FormikProps } from "src/components/InputComponent/Input";
+import { TextField } from "@mui/material";
 import { FieldProps } from "@src/hooks/useFormConfig/useFormConfig";
-import { StyledTextField } from "./styles";
-
-type FormikProps = {
-  values: FormikValues;
-  errors: FormikErrors<any>;
-  touched: FormikTouched<any>;
-  handleChange: ChangeEventHandler;
-  handleBlur: ChangeEventHandler;
-};
 
 type TextInputProps = {
   field: FieldProps;
   formik: FormikProps;
+  isNumber?: boolean;
+  isTextArea?: boolean;
 };
 
-function TextInput({ field, formik }: TextInputProps) {
+function TextInput({
+  field,
+  formik,
+  isNumber = false,
+  isTextArea = false
+}: TextInputProps) {
   const { values, errors, touched, handleChange, handleBlur } = formik;
+
   return (
-    <StyledTextField
+    <TextField
       error={touched[field.id] && !!errors[field.id]}
       id={field.id}
       label={field.label}
-      type={field.id === "password" ? "password" : "text"}
+      type={field.validate === "password" ? "password" : "text"}
       onChange={handleChange}
       onBlur={handleBlur}
       helperText={(touched[field.id] && errors[field.id]) ?? null}
       placeholder={field.placeholder}
       margin="normal"
       value={values[field.id]}
+      inputProps={
+        isNumber ? { inputMode: "numeric", pattern: "[0-9]*" } : undefined
+      }
+      multiline={isTextArea}
+      maxRows={isTextArea ? 10 : 1}
+      minRows={isTextArea ? 5 : 1}
     />
   );
 }
