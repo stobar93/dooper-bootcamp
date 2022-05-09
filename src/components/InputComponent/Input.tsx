@@ -30,6 +30,8 @@ function Input({ field, formik }: TextInputProps) {
   if (field.validate === "text_long")
     return <TextInput field={field} formik={formik} isTextArea={true} />;
 
+  if (field.validate === "text_select") return null;
+
   if (field.validate === "file")
     return <ImageInput field={field} formik={formik} />;
 

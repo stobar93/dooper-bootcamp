@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
 import { Button, Typography } from "@mui/material";
+import useCategories from "@src/hooks/useCategories";
 import useFormConfig, {
   FieldProps
 } from "@src/hooks/useFormConfig/useFormConfig";
@@ -9,6 +10,7 @@ import useMutateProduct from "@src/hooks/useMutateProduct";
 import { Product } from "@src/types/SchemaDB";
 import FormFeedbackDialog from "../FormFeedbackDialog";
 import InputComponent from "../InputComponent";
+import SelectInput from "../InputComponent/components/SelectInput";
 import * as Styles from "./styles";
 
 const fields: FieldProps[] = [
@@ -26,6 +28,14 @@ const fields: FieldProps[] = [
     placeholder: "",
     label: "Description",
     validate: "text_long",
+    required: true
+  },
+  {
+    id: "category",
+    initialValue: "",
+    placeholder: "Categoria",
+    label: "Categoria",
+    validate: "text_select",
     required: true
   },
   {
@@ -63,6 +73,7 @@ function ProductForm({ initialProduct }: ProductFormProps) {
   const { productMutate } = useMutateProduct();
   const imageMutation = useImageStorage();
   const queryClient = useQueryClient();
+  const { categories, isSuccess, isLoading } = useCategories();
 
   const handleSubmit = (values: any) => {
     productMutate.mutate(values, {
@@ -119,9 +130,25 @@ function ProductForm({ initialProduct }: ProductFormProps) {
         src={imgUrl}
       />
       <Styles.StyledForm onSubmit={formConfig.handleSubmit}>
-        {fields.map((field) => (
-          <InputComponent key={field.id} field={field} formik={formConfig} />
-        ))}
+        {fields.map((field) => {
+          if (field.id !== "category") {
+            return (
+              <InputComponent
+                key={field.id}
+                field={field}
+                formik={formConfig}
+              />
+            );
+          }
+          return (
+            <SelectInput
+              key={field.id}
+              field={field}
+              formik={formConfig}
+              options={categories}
+            />
+          );
+        })}
         <Button
           variant="contained"
           color="primary"
