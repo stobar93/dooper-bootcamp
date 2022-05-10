@@ -131,7 +131,7 @@ function EditProfileForm() {
     }
   };
 
-  const formConfig = useFormConfig(mappedFields, handleSubmit);
+  const formConfig = useFormConfig(fields, handleSubmit, profile);
 
   return (
     <Styledform onSubmit={formConfig.handleSubmit}>

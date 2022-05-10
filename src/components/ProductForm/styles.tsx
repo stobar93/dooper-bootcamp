@@ -1,7 +1,7 @@
 import theme from "src/theme";
 import { Avatar, styled } from "@mui/material";
 
-export const Form = styled("form")`
+export const StyledForm = styled("form")`
   display: flex;
   flex-direction: column;
   justify-content: center;

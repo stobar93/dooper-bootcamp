@@ -118,7 +118,7 @@ function ProductForm({ initialProduct }: ProductFormProps) {
         alt={`product ${initialProduct ? initialProduct.id : null} image`}
         src={imgUrl}
       />
-      <Styles.Form onSubmit={formConfig.handleSubmit}>
+      <Styles.StyledForm onSubmit={formConfig.handleSubmit}>
         {fields.map((field) => (
           <InputComponent key={field.id} field={field} formik={formConfig} />
         ))}
@@ -134,7 +134,7 @@ function ProductForm({ initialProduct }: ProductFormProps) {
           formStatus={formConfig.formStatus}
           setFormStatus={formConfig.setFormStatus}
         />
-      </Styles.Form>
+      </Styles.StyledForm>
     </>
   );
 }

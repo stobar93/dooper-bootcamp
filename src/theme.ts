@@ -125,6 +125,13 @@ const theme = createTheme({
           backgroundColor: "#fff"
         }
       }
+    },
+    MuiListItem: {
+      styleOverrides: {
+        container: {
+          border: "1px solid #3B34FF"
+        }
+      }
     }
   },
   palette: {
