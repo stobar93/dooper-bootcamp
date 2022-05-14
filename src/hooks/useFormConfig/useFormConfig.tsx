@@ -6,6 +6,7 @@ import { mixed, number, object, string } from "yup";
 export type FieldTypes =
   | "text"
   | "text_long"
+  | "text_select"
   | "password"
   | "email"
   | "phone_number"
@@ -46,6 +47,7 @@ const objectFromArray = (fields: FieldProps[], key: keyof FieldProps) => {
 const validationDictionary = {
   text: string(),
   text_long: string(),
+  text_select: string(),
   email: string().email("Please provide a valid email"),
   password: string()
     .matches(new RegExp(/(?=.*[a-z])/), "Must contain lowercase a-z characters")

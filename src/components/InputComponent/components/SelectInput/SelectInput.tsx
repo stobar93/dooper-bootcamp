@@ -1,21 +1,20 @@
 import React from "react";
 import { FormikProps } from "src/components/InputComponent/Input";
-import { TextField } from "@mui/material";
+import { MenuItem, TextField } from "@mui/material";
 import { FieldProps } from "@src/hooks/useFormConfig/useFormConfig";
 
-type TextInputProps = {
+interface Option {
+  id: any;
+  title: string;
+}
+
+interface SelectInputProps {
   field: FieldProps;
   formik: FormikProps;
-  isNumber?: boolean;
-  isTextArea?: boolean;
-};
+  options: Option[] | undefined;
+}
 
-function TextInput({
-  field,
-  formik,
-  isNumber = false,
-  isTextArea = false
-}: TextInputProps) {
+function SelectInput({ field, formik, options }: SelectInputProps) {
   const { values, errors, touched, handleChange, handleBlur } = formik;
 
   return (
@@ -24,21 +23,22 @@ function TextInput({
       id={field.id}
       name={field.id}
       label={field.label}
-      type={field.validate === "password" ? "password" : "text"}
+      select
       onChange={handleChange}
       onBlur={handleBlur}
       helperText={(touched[field.id] && errors[field.id]) ?? null}
       placeholder={field.placeholder}
       margin="normal"
       value={values[field.id]}
-      inputProps={
-        isNumber ? { inputMode: "numeric", pattern: "[0-9]*" } : undefined
-      }
-      multiline={isTextArea}
-      maxRows={isTextArea ? 10 : 1}
-      minRows={isTextArea ? 5 : 1}
-    />
+    >
+      {options &&
+        options.map((option) => (
+          <MenuItem key={option.id} value={option.id}>
+            {option.title}
+          </MenuItem>
+        ))}
+    </TextField>
   );
 }
 
-export default TextInput;
+export default SelectInput;

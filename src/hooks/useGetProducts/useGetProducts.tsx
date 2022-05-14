@@ -17,24 +17,28 @@ export interface UseGetProductsProps {
     column: string;
     options: any;
   };
+  category?: number;
 }
 
 const buildQuery = (
-  { ownProducts, published, order }: UseGetProductsProps,
+  { ownProducts, published, order, category }: UseGetProductsProps,
   user: User
 ) => {
   let query = supabaseClient.from("product").select("*");
 
   if (ownProducts) query.eq("created_by", user.id);
   if (published !== undefined) query.eq("published", published);
+  if (category) query.eq("category", category);
   if (order !== undefined) query.order(order.column, { ...order.options });
+
   return query;
 };
 
 function useProducts({
   ownProducts = false,
   published,
-  order
+  order,
+  category
 }: UseGetProductsProps): UseGetProductsResult {
   const { user, error: authError } = useUser();
 
@@ -44,7 +48,10 @@ function useProducts({
     }
 
     if (user) {
-      const query = buildQuery({ ownProducts, published, order }, user);
+      const query = buildQuery(
+        { ownProducts, published, order, category },
+        user
+      );
 
       const { data, error: productsError } = await query;
 
@@ -62,7 +69,7 @@ function useProducts({
     isError,
     isSuccess
   } = useQuery(
-    ["fetch-products", user?.role, ownProducts, published, order],
+    ["fetch-products", user?.role, ownProducts, published, order, category],
     () => getProducts()
   );
 
