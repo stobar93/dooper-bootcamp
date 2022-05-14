@@ -34,7 +34,7 @@ function useImageStorage() {
           await supabaseClient
             .from("product")
             .update({
-              image: `https://zgmlqcusuwgtxlayftgh.supabase.co/storage/v1/object/public/${data.Key}`
+              image: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${data.Key}`
             })
             .eq("id", productId)
             .maybeSingle();
