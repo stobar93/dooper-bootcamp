@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:staging": "env-cmd -f .env.staging next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -21,6 +22,7 @@
     "@mui/material": "latest",
     "@supabase/supabase-auth-helpers": "^1.3.0",
     "@supabase/supabase-js": "^1.33.3",
+    "env-cmd": "^10.1.0",
     "formik": "^2.2.9",
     "next": "latest",
     "react": "latest",
